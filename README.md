@@ -34,7 +34,7 @@ Tag:
 
 📸 Screenshot: EC2 instance with Auto-Stop tag
 
-![EC2 Auto Stop](screenshots/ec2-auto-stop.png)
+![EC2 Auto Stop](aws-ec2-lambda-automation/screenshots/ec2-auto-stop.png)
 
 ------------------------------------------------------------------------
 
