@@ -32,7 +32,7 @@ Tag:
   -------- -----------
   Action   Auto-Stop
 
-📸 Screenshot: EC2 instance with Auto-Stop tag
+Screenshot: EC2 instance with Auto-Stop tag
 
 ![EC2 Auto Stop](aws-ec2-lambda-automation/screenshots/ec2-auto-stop.png)
 
@@ -48,9 +48,9 @@ Tag:
   -------- ------------
   Action   Auto-Start
 
-📸 Screenshot: EC2 instance with Auto-Start tag
+Screenshot: EC2 instance with Auto-Start tag
 
-![EC2 Auto Start](screenshots/ec2-auto-start.png)
+![EC2 Auto Start](aws-ec2-lambda-automation/screenshots/ec2-auto-start.png)
 
 ------------------------------------------------------------------------
 
@@ -67,9 +67,9 @@ Role Name:
 
 LambdaEC2ManagerRole
 
-📸 Screenshot: IAM role with EC2 permissions
+Screenshot: IAM role with EC2 permissions
 
-![IAM Role](screenshots/iam-role.png)
+![IAM Role](aws-ec2-lambda-automation/screenshots/iam-role.png)
 
 ------------------------------------------------------------------------
 
@@ -85,9 +85,9 @@ Function Name: ec2-auto-manager\
 Runtime: Python 3.x\
 Execution Role: LambdaEC2ManagerRole
 
-📸 Screenshot: Lambda function creation page
+Screenshot: Lambda function creation page
 
-![Lambda Create](screenshots/lambda-create.png)
+![Lambda Create](aws-ec2-lambda-automation/screenshots/lambda-create.png)
 
 ------------------------------------------------------------------------
 
@@ -146,9 +146,9 @@ def lambda_handler(event, context):
     }
 ```
 
-📸 Screenshot: Lambda code editor
+Screenshot: Lambda code editor
 
-![Lambda Code](screenshots/lambda-code.png)
+![Lambda Code](aws-ec2-lambda-automation/screenshots/lambda-code.png)
 
 ------------------------------------------------------------------------
 
@@ -160,9 +160,9 @@ def lambda_handler(event, context):
 
 Event Name: test
 
-📸 Screenshot: Lambda test execution
+Screenshot: Lambda test execution
 
-![Lambda Test](screenshots/lambda-test.png)
+![Lambda Test](aws-ec2-lambda-automation/screenshots/lambda-test.png)
 
 ------------------------------------------------------------------------
 
@@ -177,9 +177,9 @@ Expected results:
   instance-stop    Auto-Stop    Stopped
   instance-start   Auto-Start   Running
 
-📸 Screenshot: EC2 instances state after Lambda execution
+Screenshot: EC2 instances state after Lambda execution
 
-![EC2 Result](screenshots/ec2-result.png)
+![EC2 Result](aws-ec2-lambda-automation/screenshots/ec2-result.png)
 
 ------------------------------------------------------------------------
 
