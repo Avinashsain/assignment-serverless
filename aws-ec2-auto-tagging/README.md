@@ -127,8 +127,9 @@ Screenshot ![EC2 Launch](screenshots/ec2-launch.png)
 
 Check Tags:
 
-CreatedOn → Date\
-Environment → Dev
+LaunchDate → Date\
+HeroVired → DevOps-Avinash
+ManagedBy → Lambda-Automation
 
 Screenshot ![EC2 Tags](screenshots/ec2-tags.png)
 
