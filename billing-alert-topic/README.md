@@ -204,6 +204,35 @@ Screenshot
 
 ---
 
+# Step 9: Testing Tip (Important)
+
+For testing purposes, set:
+
+THRESHOLD = 0
+
+This ensures:
+
+- Billing will always be greater than 0  
+- SNS alert will always trigger  
+- Easy verification of setup  
+
+---
+
+## Example Output
+
+CloudWatch Logs:
+
+Current Billing: $0.0  
+Alert sent!
+
+---
+
+⚠️ After testing, change it back:
+
+THRESHOLD = 50
+
+Otherwise, you will receive alerts every day.
+
 # Folder Structure
 
 ```
