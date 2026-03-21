@@ -1,224 +1,251 @@
-# Assignment 1: Automated Instance Management Using AWS Lambda and Boto3
+# Assignment 6: Monitor and Alert High AWS Billing Using AWS Lambda, Boto3, and SNS
 
 ## Objective
 
-The goal of this assignment is to automate the starting and stopping of
-EC2 instances based on tags using AWS Lambda and Boto3.
+Create an automated alerting system that notifies you when AWS billing exceeds a defined threshold.
 
-------------------------------------------------------------------------
+---
 
 # Architecture
 
-EC2 Instances (Tagged)\
-⬇\
-AWS Lambda (Python + Boto3)\
-⬇\
-Automatic Start / Stop
+CloudWatch Billing Metrics
+⬇
+AWS Lambda (Python + Boto3)
+⬇
+SNS Topic (Email Alert)
 
-------------------------------------------------------------------------
+---
 
-# Step 1: Create EC2 Instances
+# Step 1: SNS Setup
 
-1.  Go to AWS Console → EC2 Dashboard
-2.  Launch two instances (t2.micro).
+1. Go to **AWS Console → SNS**
+2. Click **Create Topic**
+3. Choose **Standard**
+4. Name:
 
-### Instance 1
+```
+billing-alert-topic
+```
 
-Name: `instance-stop`
+5. Create Subscription:
 
-Tag:
+   * Protocol: Email
+   * Endpoint: your email
 
-  Key      Value
-  -------- -----------
-  Action   Auto-Stop
+6. Confirm subscription from your email inbox
 
-Screenshot: EC2 instance with Auto-Stop tag
+Screenshot
+![SNS Topic](screenshots/sns-topic.png)
 
-![EC2 Auto Stop](screenshots/ec2-auto-stop.png)
-
-------------------------------------------------------------------------
-
-### Instance 2
-
-Name: `instance-start`
-
-Tag:
-
-  Key      Value
-  -------- ------------
-  Action   Auto-Start
-
-Screenshot: EC2 instance with Auto-Start tag
-
-![EC2 Auto Start](screenshots/ec2-auto-start.png)
-
-------------------------------------------------------------------------
+---
 
 # Step 2: Create IAM Role for Lambda
 
-1.  Go to IAM Dashboard
-2.  Click Roles → Create Role
-3.  Choose Lambda
-4.  Attach policy:
+1. Go to **IAM → Roles**
+2. Click **Create Role**
+3. Choose **Lambda**
+4. Attach policies:
 
-AmazonEC2FullAccess
+```
+CloudWatchFullAccess
+AmazonSNSFullAccess
+```
 
-Role Name:
+5. Role name:
 
-LambdaEC2ManagerRole
+```
+lambda-billing-role
+```
 
-Screenshot: IAM role with EC2 permissions
+Screenshot
+![IAM Role](screenshots/iam-role-billing.png)
 
-![IAM Role](screenshots/iam-role.png)
-
-------------------------------------------------------------------------
+---
 
 # Step 3: Create Lambda Function
 
-1.  Open AWS Lambda Console
-2.  Click Create Function
-3.  Choose Author From Scratch
+1. Go to **AWS Lambda**
+2. Click **Create Function**
+3. Choose **Author from scratch**
 
-Settings:
+Configuration:
 
-Function Name: ec2-auto-manager\
-Runtime: Python 3.x\
-Execution Role: LambdaEC2ManagerRole
+```
+Function Name: lambda-billing-function
+Runtime: Python 3.x
+Execution Role: lambda-billing-role
+```
 
-Screenshot: Lambda function creation page
-
+Screenshot
 ![Lambda Create](screenshots/lambda-create.png)
 
-------------------------------------------------------------------------
+---
 
 # Step 4: Lambda Function Code
 
-``` python
+```python
 import boto3
+from datetime import datetime, timedelta
 
-ec2 = boto3.client('ec2')
+cloudwatch = boto3.client('cloudwatch')
+sns = boto3.client('sns')
+
+SNS_TOPIC_ARN = "YOUR_SNS_TOPIC_ARN"
+THRESHOLD = 50
 
 def lambda_handler(event, context):
 
-    # Stop instances with Auto-Stop tag
-    stop_instances = ec2.describe_instances(
-        Filters=[
-            {'Name': 'tag:Action', 'Values': ['Auto-Stop']},
-            {'Name': 'instance-state-name', 'Values': ['running']}
-        ]
+    end = datetime.utcnow()
+    start = end - timedelta(days=1)
+
+    response = cloudwatch.get_metric_statistics(
+        Namespace='AWS/Billing',
+        MetricName='EstimatedCharges',
+        Dimensions=[
+            {
+                'Name': 'Currency',
+                'Value': 'USD'
+            }
+        ],
+        StartTime=start,
+        EndTime=end,
+        Period=86400,
+        Statistics=['Maximum']
     )
 
-    stop_ids = []
+    if response['Datapoints']:
+        amount = response['Datapoints'][0]['Maximum']
+        print(f"Current Billing: ${amount}")
 
-    for reservation in stop_instances['Reservations']:
-        for instance in reservation['Instances']:
-            stop_ids.append(instance['InstanceId'])
+        if amount > THRESHOLD:
+            message = f"AWS Billing Alert! Current charges: ${amount}"
 
-    if stop_ids:
-        ec2.stop_instances(InstanceIds=stop_ids)
-        print("Stopping instances:", stop_ids)
+            sns.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Message=message,
+                Subject="AWS Billing Alert"
+            )
+
+            print("Alert sent!")
+        else:
+            print("Billing under control")
+
     else:
-        print("No instances to stop")
-
-    # Start instances with Auto-Start tag
-    start_instances = ec2.describe_instances(
-        Filters=[
-            {'Name': 'tag:Action', 'Values': ['Auto-Start']},
-            {'Name': 'instance-state-name', 'Values': ['stopped']}
-        ]
-    )
-
-    start_ids = []
-
-    for reservation in start_instances['Reservations']:
-        for instance in reservation['Instances']:
-            start_ids.append(instance['InstanceId'])
-
-    if start_ids:
-        ec2.start_instances(InstanceIds=start_ids)
-        print("Starting instances:", start_ids)
-    else:
-        print("No instances to start")
-
-    return {
-        'statusCode': 200,
-        'body': 'EC2 actions completed'
-    }
+        print("No billing data found")
 ```
 
-Screenshot: Lambda code editor
+Screenshot
+![Lambda Code](screenshots/lambda-code-billing.png)
 
-![Lambda Code](screenshots/lambda-code.png)
+---
 
-------------------------------------------------------------------------
+# Step 5: Create EventBridge Schedule (Bonus)
 
-# Step 5: Deploy and Test Lambda
+1. Go to **EventBridge**
+2. Click **Create Rule**
+3. Choose **Schedule**
 
-1.  Click Deploy
-2.  Click Test
-3.  Create test event
+Configuration:
 
+```
+Rate: 1 day
+```
+
+4. Target:
+
+   * Lambda Function → `lambda-billing-function`
+
+Screenshot
+![Event Rule](screenshots/event-rule-billing.png)
+
+---
+
+# Step 6: Test Lambda Function
+
+1. Click **Deploy**
+2. Click **Test**
+3. Create test event:
+
+```
 Event Name: test
+```
 
-Screenshot: Lambda test execution
+Screenshot
+![Lambda Test](screenshots/lambda-test-billing.png)
 
-![Lambda Test](screenshots/lambda-test.png)
+---
 
-------------------------------------------------------------------------
+# Step 7: Verify Email Alert
 
-# Step 6: Verify EC2 Results
+If billing exceeds threshold:
 
-Go back to EC2 Dashboard and check instance states.
+* You will receive an email notification
 
-Expected results:
+Screenshot
+![Email Alert](screenshots/email-alert.png)
 
-  Instance         Tag          Result
-  ---------------- ------------ ---------
-  instance-stop    Auto-Stop    Stopped
-  instance-start   Auto-Start   Running
+---
 
-Screenshot: EC2 instances state after Lambda execution
+# Step 8: CloudWatch Logs
 
-![EC2 Result](screenshots/ec2-result.png)
+Go to:
 
-------------------------------------------------------------------------
+**Lambda → Monitor → View CloudWatch Logs**
 
-# Case Testing
+Expected output:
 
-## Case 1
+```
+Current Billing: $55
+Alert sent!
+```
 
-Initial state:
+Screenshot
+![CloudWatch Logs](screenshots/cloudwatch-logs-billing.png)
 
-instance-stop = Stopped\
-instance-start = Stopped
+---
 
-Result:
+# Folder Structure
 
-instance-stop = Stopped\
-instance-start = Running
+```
+aws-billing-alert/
+│
+├── README.md
+|──lambda_function.py
+└── screenshots/
+    ├── sns-topic.png
+    ├── iam-role-billing.png
+    ├── lambda-create.png
+    ├── lambda-code-billing.png
+    ├── event-rule-billing.png
+    ├── lambda-test-billing.png
+    ├── email-alert.png
+    └── cloudwatch-logs-billing.png
+```
 
-------------------------------------------------------------------------
+---
 
-## Case 2
+# Expected Result
 
-Initial state:
+* Lambda runs daily
+* Checks billing amount
+* Sends alert if threshold exceeded
+* Logs activity in CloudWatch
 
-instance-stop = Running\
-instance-start = Running
-
-Result:
-
-instance-stop = Stopped\
-instance-start = Running
-
-------------------------------------------------------------------------
+---
 
 # Conclusion
 
-This project demonstrates how AWS Lambda and Boto3 can automatically
-manage EC2 instances based on tags.
+This project demonstrates how to:
 
-This approach helps automate infrastructure management and reduce manual
-work in cloud environments.
+* Monitor AWS billing using CloudWatch
+* Automate alerts using Lambda
+* Notify users via SNS
 
-------------------------------------------------------------------------
+---
+
+# Future Improvements
+
+* Add multiple alert thresholds
+* Integrate with Slack or Teams
+* Store billing data in S3
+* Use cost anomaly detection
