@@ -424,7 +424,7 @@ Screenshot ![IAM Role](aws-ec2-auto-tagging/screenshots/iam-role-ec2.png)
 
 # Step 3: Lambda Function
 
-Function Name: ec2-auto-tag\
+Function Name: auto-tagging-function\
 Runtime: Python 3.x
 
 Screenshot ![Lambda Create](aws-ec2-auto-tagging/screenshots/lambda-create.png)
@@ -539,7 +539,7 @@ Expected Logs:
     END RequestId: xxxx
     REPORT RequestId: xxxx Duration: 120 ms
 
-📸 Screenshots
+Screenshots
 
 ![CloudWatch Open](aws-ec2-auto-tagging/screenshots/cloudwatch-open.png)\
 ![Log Group](aws-ec2-auto-tagging/screenshots/log-group.png)\
