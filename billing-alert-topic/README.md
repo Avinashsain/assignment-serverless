@@ -195,7 +195,7 @@ Go to:
 Expected output:
 
 ```
-Current Billing: $55
+Current Billing: $0.0
 Alert sent!
 ```
 

@@ -159,4 +159,5 @@ Screenshots
 
     aws-ec2-auto-tagging/
     ├── README.md
+    ├──lambda_function.py
     └── screenshots/
