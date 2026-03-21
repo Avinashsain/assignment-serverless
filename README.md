@@ -520,7 +520,7 @@ Screenshot ![EC2 Launch](aws-ec2-auto-tagging/screenshots/ec2-launch.png)
 Check Tags:
 
 LaunchDate → Date\
-HeroVired → DevOps-Avinash
+HeroVired → DevOps-Avinash\
 ManagedBy → Lambda-Automation
 
 Screenshot ![EC2 Tags](aws-ec2-auto-tagging/screenshots/ec2-tags.png)
