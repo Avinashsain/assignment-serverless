@@ -46,15 +46,12 @@ Screenshot:
 
 ---
 
-## ⚡ Step 3: Lambda Function Setup
+## Step 3: Lambda Function Setup
 - Function Name: `ebs-snapshot-cleanup-function`
 - Runtime: Python 3.x
 
 Screenshot:
 ![Lambda Setup](screenshots/3-lambda-function.png)
-
-Screenshot:
-![Lambda Code](screenshots/4-lambda-code.png)
 
 ---
 
@@ -105,6 +102,9 @@ def lambda_handler(event, context):
 ```
 
 ---
+
+Screenshot:
+![Lambda Code](screenshots/4-lambda-code.png)
 
 ## Step 5: Testing (Important)
 

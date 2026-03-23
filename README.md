@@ -430,23 +430,19 @@ Screenshot:
 
 ## Step 2: IAM Role
 - Created IAM Role for Lambda
-- Attached policy: `AmazonEC2FullAccess`
-- Attached policy: `CloudWatchFullAccess`
+- Attached policy: `AmazonEC2FullAccess, CloudWatchFullAccess`
 
 Screenshot:
 ![IAM Role](assignment-ebs-snapshot/screenshots/2-iam-role.png)
 
 ---
 
-## ⚡ Step 3: Lambda Function Setup
+## Step 3: Lambda Function Setup
 - Function Name: `ebs-snapshot-cleanup-function`
 - Runtime: Python 3.x
 
 Screenshot:
 ![Lambda Setup](assignment-ebs-snapshot/screenshots/3-lambda-function.png)
-
-Screenshot:
-![Lambda Code](assignment-ebs-snapshot/screenshots/4-lambda-code.png)
 
 ---
 
@@ -498,6 +494,9 @@ def lambda_handler(event, context):
 
 ---
 
+Screenshot:
+![Lambda Code](assignment-ebs-snapshot/screenshots/4-lambda-code.png)
+
 ## Step 5: Testing (Important)
 
 ### Temporary Changes for Testing:
@@ -533,8 +532,10 @@ Screenshot:
 rate(7 days)
 ```
 
-Screenshot:
+Screenshot (Event Schedule):
 ![EventBridge Rule Event Schedule](assignment-ebs-snapshot/screenshots/6-eventbridge-rule.png)
+
+Screenshot (Targets):
 ![EventBridge Rule Targets](assignment-ebs-snapshot/screenshots/7-eventbridge-rule.png)
 
 ---
