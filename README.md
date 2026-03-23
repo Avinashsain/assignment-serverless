@@ -523,7 +523,7 @@ rate(5 minutes)
 - Snapshot deleted within 2 minutes
 
 Screenshot:
-![Test Output](screenshots/5-test-output.png)
+![Test Output](assignment-ebs-snapshot/screenshots/5-test-output.png)
 
 ---
 
@@ -534,8 +534,8 @@ rate(7 days)
 ```
 
 Screenshot:
-![EventBridge Rule Event Schedule](screenshots/6-eventbridge-rule.png)
-![EventBridge Rule Targets](screenshots/7-eventbridge-rule.png)
+![EventBridge Rule Event Schedule](assignment-ebs-snapshot/screenshots/6-eventbridge-rule.png)
+![EventBridge Rule Targets](assignment-ebs-snapshot/screenshots/7-eventbridge-rule.png)
 
 ---
 
@@ -543,7 +543,7 @@ Screenshot:
 - Verified logs for execution
 
 Screenshot:
-![CloudWatch Logs](screenshots/8-cloudwatch-logs.png)
+![CloudWatch Logs](assignment-ebs-snapshot/screenshots/8-cloudwatch-logs.png)
 
 ---
 
@@ -554,7 +554,7 @@ Screenshot:
   - Old snapshots deleted
 
 Screenshot:
-![Snapshots](screenshots/9-ec2-snapshots.png)
+![Snapshots](assignment-ebs-snapshot/screenshots/9-ec2-snapshots.png)
 
 ---
 

@@ -106,7 +106,7 @@ def lambda_handler(event, context):
 
 ---
 
-## 🧪 Step 5: Testing (Important)
+## Step 5: Testing (Important)
 
 ### Temporary Changes for Testing:
 To verify snapshot deletion quickly, the following changes were made:
