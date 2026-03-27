@@ -1458,7 +1458,7 @@ Screenshot:
 ## Step 8: CloudWatch Logs
 
 Screenshot:  
-![Logs](screenshots/aws-s3-glacier/7-cloudwatch-logs.png)
+![Logs](aws-s3-glacier/screenshots/7-cloudwatch-logs.png)
 
 ---
 
