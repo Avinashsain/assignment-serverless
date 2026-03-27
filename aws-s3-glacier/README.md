@@ -128,7 +128,7 @@ Screenshot:
 ## Project Structure
 
 ```
-assignment-s3-glacier/
+aws-s3-glacier/
 │
 ├── README.md
 ├── lambda_function.py
